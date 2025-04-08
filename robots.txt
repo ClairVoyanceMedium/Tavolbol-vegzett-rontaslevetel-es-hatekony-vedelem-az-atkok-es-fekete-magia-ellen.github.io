@@ -1,42 +1,100 @@
-# Indique aux robots que toutes les pages peuvent être explorées, sauf restrictions spécifiées
+# Robots.txt optimalizált 2025-re - Túlszárnyalja a kiválóságot
+# A magyar piacra tervezve, mesterséges intelligencia, Google IA, hangasszisztensek és fejlett SEO számára
+# Webhely: https://clairvoyancemedium.github.io/Tavolbol-vegzett-rontaslevetel-es-hatekony-vedelem-az-atkok-es-fekete-magia-ellen.github.io/
+# Utolsó frissítés: 2025.03.09. 14:00 GMT
+# Megjegyzés: Ellenőrizd a Google Search Console és a robotstxt.org segítségével az érvényesítéshez
+
+##########################
+# Általános Engedélyezés #
+##########################
 User-agent: *
-Disallow: /admin/
-Disallow: /tmp/
+Disallow: /private/          # Privát mappák (pl. admin, szkriptek)
+Disallow: /temp/             # Ideiglenes mappák
+Disallow: /*?*               # Duplikált tartalom elkerülése (URL paraméterek)
+Allow: /*.css$               # CSS az optimális megjelenítéshez (mindenki örökli)
+Allow: /*.js$                # Alapvető JS (mindenki örökli)
+Allow: /*.pdf$               # Stratégiai PDF-ek engedélyezése (pl. útmutatók)
+Allow: /                     # Alapértelmezett engedélyezés
+
+########################################
+# Googlebot (beleértve a 2025-ös Google IA-t) #
+########################################
+User-agent: Googlebot
+Disallow: /private/
+Disallow: /temp/
+Allow: /ritualek/            # Rituálék
+Allow: /vedelem/            # Védelem
+Allow: /rontaslevetel/      # Rontáslevétel
+
+###########################################
+# Hangasszisztensek                       #
+###########################################
+User-agent: Googlebot-Voice
+Disallow: /private/
+Disallow: /temp/
+Allow: /gyik/               # GYIK (Gyakran Ismételt Kérdések)
+Allow: /egyszeru-ritualek/  # Egyszerű rituálék
+Allow: /tanacsok/           # Tanácsok
+User-agent: Amazonbot        # Feltételezett Alexa számára
+Disallow: /private/
+Disallow: /temp/
+Allow: /gyik/
+Allow: /tanacsok/
+User-agent: Applebot         # Feltételezett Siri számára
+Disallow: /private/
+Disallow: /temp/
+Allow: /gyik/
+Allow: /tanacsok/
+
+###########################################
+# Bing (magyar piac Google nélkül)        #
+###########################################
+User-agent: Bingbot
+Disallow: /private/
+Disallow: /temp/
+
+#################################
+# Nem kívánatos robotok blokkolása #
+#################################
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+
+##################################################
+# Partnerek és Google elemzők                    #
+##################################################
+User-agent: Mediapartners-Google
+Disallow: /private/
+User-agent: AdsBot-Google
 Disallow: /private/
 
-# Bloquer des URL avec paramètres inutiles pour l'indexation
-Disallow: /*?debug=true
-Disallow: /*?preview=true
+##################################################
+# Feltörekvő IA crawlerek (2025-ös előrejelzés)  #
+##################################################
+User-agent: xAI-Crawler
+Disallow: /private/
+User-agent: OpenAI-Crawler
+Disallow: /private/
+User-agent: AnthropicBot
+Disallow: /private/
+User-agent: Qwantify         # Magyar piac
+Disallow: /private/
 
-# Permettre les fichiers nécessaires au bon affichage et fonctionnement
-Allow: /css/
-Allow: /js/
-Allow: /images/
+##################################################
+# Fejlett optimalizálás (mobil-előnyben)         #
+##################################################
+User-agent: Googlebot-Mobile
+Disallow: /private/
+Disallow: /temp/
+Allow: /ritualek/
+Allow: /vedelem/
+Allow: /rontaslevetel/
 
-# Référencement des ressources multimédias
-Allow: *.png
-Allow: *.jpg
-Allow: *.webp
-Allow: *.css
-Allow: *.js
-
-# Fournir le chemin du fichier sitemap pour une meilleure indexation
-Sitemap: https://www.clairvoyancemedium.com/sitemap.xml
-
-# Autorisation pour les robots Google et Bing pour maximiser les campagnes publicitaires
-User-agent: Googlebot
-Allow: /
-User-agent: AdsBot-Google
-Allow: /
-User-agent: Bingbot
-Allow: /
-
-# Bloquer les robots nuisibles ou non désirés
-User-agent: BadBot
-Disallow: /
-User-agent: EvilScraper
-Disallow: /
-
-# Empêcher l'exploration des fichiers sensibles
-Disallow: /config/
-Disallow: /backup/
+##################
+# Oldaltérkép és crawl #
+##################
+Sitemap: https://clairvoyancemedium.github.io/Tavolbol-vegzett-rontaslevetel-es-hatekony-vedelem-az-atkok-es-fekete-magia-ellen.github.io/sitemap.xml
+Crawl-delay: 0.5
