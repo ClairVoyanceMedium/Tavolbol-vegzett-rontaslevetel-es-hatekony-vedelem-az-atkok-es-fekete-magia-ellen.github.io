@@ -1006,7 +1006,7 @@ const knowledgeBase = [
     { question: "Sugárzás | Fényesség | Csillogás | Fény | Ragyogás | Aura", fullAnswer: "Sugárzásodat egy gonosz árnyék homályosítja el; fordulj Frederickhez a ClairVoyanceMedium.com kabinetből, hogy visszaállítsa fényességedet és felfedje belső ragyogásodat. A belső ragyogás elhomályosulása egy gonosz árnyék következménye. Frederick visszaállítja fényességedet azáltal, hogy eloszlatja ezeket a hatásokat, felfedve természetes ragyogásodat minden területen a csillogás és ragyogó siker érdekében. Előnyök: ragyogás és diadalmas siker." }
 ];
 
-// A tudásbázis előkészítése
+// Tudásbázis előkészítése
 function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -1074,59 +1074,59 @@ function findBestMatch(userInput) {
     return maxScore > 0 ? bestMatch : null;
 }
 
-// Válaszadó függvény magyar fordítással
+// Javított getResponse függvény "viszlát" és "kapcsolat" kezelésére
 function getResponse(userMsg) {
     const lowerMsg = userMsg.toLowerCase().trim();
     conversationHistory.push(lowerMsg);
 
-    // Prioritás az "viszlát" és változatai számára
-    const goodbyeTriggers = ["viszlát", "viszlat", "hamarosan találkozunk", "jó napot", "szia", "bybye", "bye"];
+    // Elsődleges ellenőrzés "viszlát" és változataihoz
+    const goodbyeTriggers = ["viszlát", "viszlat", "viszlátásra", "szép napot", "sziasztok", "pápá", "bye"];
     if (goodbyeTriggers.some(phrase => lowerMsg === phrase || lowerMsg.startsWith(phrase))) {
         nonUnderstoodCount = 0;
-        trackClick("Goodbye", "Interakció", 0);
-        return "Hamarosan újra találkozunk az örök tisztaságban! Frederick, aki ezreket segített, állandó éberséggel vesz körül téged. Többé nem vagy egyedül az árnyakkal szemben, mert tudd, hogy ereje minden sötétséget felülmúl.";
+        trackClick("Viszlát", "Interakció", 0);
+        return translations.goodbye;
     } 
-    // Prioritás a "kapcsolat" számára
+    // Elsődleges ellenőrzés "kapcsolat" kifejezéshez
     else if (lowerMsg === "kapcsolat" || lowerMsg.startsWith("kapcsolat")) {
         nonUnderstoodCount = 0;
-        trackClick("ContactRequest", "Interakció", 0);
-        return "Lépj kapcsolatba Frederickkel most azonnal emailben az alábbi címen: contact.clairvoyancemedium@gmail.com. Csapatunk gyorsan válaszol, hogy megszervezzen egy emailes konzultációt vagy egy erőteljes rituálét, garantálva a gyors reagálást és azonnali átalakulást az igényeidhez igazítva. Előnyök: gyorsaság és azonnali átalakulás.";
+        trackClick("KapcsolatKérés", "Interakció", 0);
+        return "Vedd fel most azonnal a kapcsolatot Frigyes-szel e-mailen a következő címen: contact.clairvoyancemedium@gmail.com. Csapatunk gyorsan válaszol, hogy megszervezhessük az e-mailes konzultációt vagy egy erőteljes rituálét, amely azonnali változást garantál a számodra. Előnyök: azonnali reagálás és átalakítás.";
     } 
-    // Egyéb alapvető válaszok
-    else if (lowerMsg === "hello") {
+    // Alap válaszok
+    else if (lowerMsg === "szia") {
         nonUnderstoodCount = 0;
-        trackClick("Greeting", "Interakció", 0);
-        return "Üdvözöllek! Hogyan segíthetek ma neked?";
-    } else if (lowerMsg === "köszönöm" || lowerMsg === "hálás vagyok" || lowerMsg === "ez nagyon kedves" || lowerMsg === "nagyon köszönöm") {
+        trackClick("Köszönés", "Interakció", 0);
+        return translations.greeting;
+    } else if (lowerMsg === "köszönöm" || lowerMsg === "köszönöm szépen" || lowerMsg === "nagyon kedves" || lowerMsg === "nagyon szépen köszönöm") {
         nonUnderstoodCount = 0;
-        trackClick("Thanks", "Interakció", 0);
-        return "Szívesen! Örülök, hogy segíthetek.";
-    } else if (["ez komoly", "komoly", "ez nagyon komoly"].includes(lowerMsg)) {
+        trackClick("Köszönet", "Interakció", 0);
+        return translations.thanks;
+    } else if (["komoly", "nagyon komoly", "ez tényleg komoly"].includes(lowerMsg)) {
         nonUnderstoodCount = 0;
-        trackClick("Serious", "Interakció", 0);
-        return "Igen, ez komoly lehet, de Frederick itt van, hogy segítsen megoldani.";
-    } else if (["rendben", "igen", "oké", "jó"].includes(lowerMsg)) {
+        trackClick("Komoly", "Interakció", 0);
+        return translations.grave;
+    } else if (["értem", "igen", "oké", "rendben"].includes(lowerMsg)) {
         nonUnderstoodCount = 0;
-        return "🙂";
+        return translations.agree;
     } 
-    // Keresés a tudásbázisban
+    // Tudásbázisban keresés
     else {
         const matchedItem = findBestMatch(userMsg);
         if (matchedItem) {
             nonUnderstoodCount = 0;
-            trackClick("ResponseGiven", "Interakció", 0);
+            trackClick("VálaszAdva", "Interakció", 0);
             return matchedItem.fullAnswer;
         } else {
             nonUnderstoodCount++;
-            trackClick("NotUnderstood", "Interakció", nonUnderstoodCount);
-            if (nonUnderstoodCount < 3) return "Sajnálom, nem értem pontosan. Meg tudnád ismételni másképp?";
+            trackClick("NemÉrtettem", "Interakció", nonUnderstoodCount);
+            if (nonUnderstoodCount < 3) return translations.notUnderstood;
             nonUnderstoodCount = 0;
-            return "Továbbra sem értem, de ne aggódj, Frederick segíthet! Kérlek, írj emailt a contact.clairvoyancemedium@gmail.com címre pontosabb válaszért.";
+            return translations.notUnderstoodAfter;
         }
     }
 }
 
-// Webhely tartalmának gyűjtése betöltéskor
+// Weboldal tartalmának összegyűjtése betöltéskor
 const siteContent = [];
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('h1, h2, h3, p, li').forEach(element => {
@@ -1144,7 +1144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         } catch (e) {
-            console.error("JSON-LD feldolgozási hiba:", e);
+            console.error("Hiba a JSON-LD elemzésnél:", e);
         }
     });
 });
@@ -1279,8 +1279,8 @@ chatToggle.addEventListener("click", () => {
         chatContainer.style.width = "300px";
         chatBox.classList.add("visible");
         chatToggle.setAttribute("aria-expanded", "true");
-        trackClick("ChatOpen", "Interakció", 0);
-        if (!chatMessages.children.length) addMessage("Üdvözöllek! Hogyan segíthetek ma neked?", "bot-message");
+        trackClick("ChatNyitás", "Interakció", 0);
+        if (!chatMessages.children.length) addMessage(translations.greeting, "bot-message");
         adjustChatContainerPosition();
         setTimeout(() => chatInput.focus(), 300);
         if (firstOpen && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) && recognition) {
@@ -1290,7 +1290,7 @@ chatToggle.addEventListener("click", () => {
     } else {
         chatBox.classList.remove("visible");
         chatToggle.setAttribute("aria-expanded", "false");
-        trackClick("ChatClose", "Interakció", 0);
+        trackClick("ChatZárás", "Interakció", 0);
         chatContainer.style.width = "auto";
         chatContainer.style.height = "auto";
         adjustChatContainerPosition();
@@ -1302,7 +1302,7 @@ chatForm.addEventListener("submit", (e) => {
     const userMsg = chatInput.value.trim();
     if (!userMsg) return;
     addMessage(userMsg, "user-message");
-    trackClick("ChatMessage", "Interakció", 0);
+    trackClick("ChatÜzenet", "Interakció", 0);
     chatInput.value = "";
     simulateTyping(() => {
         getResponseFromSite(userMsg, (answer) => {
@@ -1316,23 +1316,23 @@ let voiceEnabled = true;
 function speak(text) {
     if (!voiceEnabled || !("speechSynthesis" in window)) return;
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "hu-HU"; // Magyar nyelvre váltás
+    utterance.lang = "hu-HU";
     utterance.pitch = 0.5;
     utterance.rate = 1.1;
     const voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
-        const hungarianVoice = voices.find(v => v.lang === "hu-HU");
-        if (hungarianVoice) utterance.voice = hungarianVoice;
+        const maleVoice = voices.find(v => v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("magyar"));
+        if (maleVoice) utterance.voice = maleVoice;
     }
     window.speechSynthesis.speak(utterance);
-    trackClick("VoiceOutput", "Interakció", 0);
+    trackClick("HangKimenet", "Interakció", 0);
 }
 
 const voiceToggle = document.getElementById("voice-toggle");
 voiceToggle.addEventListener("click", () => {
     voiceEnabled = !voiceEnabled;
     voiceToggle.classList.toggle("disabled", !voiceEnabled);
-    trackClick(voiceEnabled ? "VoiceEnabled" : "VoiceDisabled", "Interakció", 0);
+    trackClick(voiceEnabled ? "HangBekapcsolva" : "HangKikapcsolva", "Interakció", 0);
 });
 
 let speechRecognitionSupported = "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
@@ -1341,90 +1341,61 @@ let recognition = null;
 if (speechRecognitionSupported) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
-    recognition.lang = "hu-HU"; // Magyar nyelvre váltás
+    recognition.lang = "hu-HU";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
     recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         addMessage(transcript, "user-message");
-        trackClick("VoiceInput", "Interakció", 0);
+        trackClick("HangBevitel", "Interakció", 0);
         simulateTyping(() => {
             getResponseFromSite(transcript, (answer) => {
                 addMessage(answer, "bot-message");
             });
         });
     };
-    recognition.onend = () => trackClick("VoiceStop", "Interakció", 0);
-    recognition.onerror = (event) => trackClick("VoiceError", "Interakció", event.error);
+    recognition.onend = () => trackClick("HangLeállítva", "Interakció", 0);
+    recognition.onerror = (event) => trackClick("HangHiba", "Interakció", event.error);
 }
 
 if (!("speechSynthesis" in window)) voiceToggle.style.display = "none";
 </script>
+    
+  <script nonce="xai-48273">
+    document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("#current-year,#current-year-footer").forEach(e=>e.textContent=new Date().getFullYear());function addToFavorites(e){const t=e.querySelector(".favorite-text");t.innerHTML="⭐ Hozzáadva!",t.style.color="#FFD700",e.setAttribute("aria-pressed","true"),/iPhone|iPad|iPod/i.test(navigator.userAgent)?alert("Oszd meg > Add a kezdőképernyőhöz"):/Android/i.test(navigator.userAgent)?alert("Menü (⋮) > Hozzáadás a kezdőképernyőhöz"):alert("Ctrl + D vagy Cmd + D");trackClick("KedvencekhezAdás","Interakció",0);}function trackClick(e,t="CTA",n=null){typeof gtag==="function"?gtag("event","click",{"event_category":t,"event_label":e,"value":n}):console.log("gtag nem elérhető:",e,t,n);}const t=document.querySelectorAll(".favorite-button");t.forEach(e=>e.addEventListener("click",()=>addToFavorites(e)));const n=document.querySelectorAll(".carousel blockquote");let a=0;n[0].classList.add("active"),setInterval(()=>{n.forEach(e=>e.classList.remove("active")),n[a].classList.add("active"),a=(a+1)%n.length},4e3);});
+  </script>
 
-<script nonce="xai-48273">
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll("#current-year, #current-year-footer").forEach(e => e.textContent = new Date().getFullYear());
-    function addToFavorites(e) {
-        const t = e.querySelector(".favorite-text");
-        t.innerHTML = "⭐ Hozzáadva!";
-        t.style.color = "#FFD700";
-        e.setAttribute("aria-pressed", "true");
-        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            alert("Megosztás > Hozzáadás a kezdőképernyőhöz");
-        } else if (/Android/i.test(navigator.userAgent)) {
-            alert("Menü (⋮) > Hozzáadás a kezdőképernyőhöz");
-        } else {
-            alert("Ctrl + D vagy Cmd + D");
-        }
-        trackClick("Kedvencekhez hozzáadás", "Interakció", 0);
-    }
-    function trackClick(e, t = "CTA", n = null) {
-        typeof gtag === "function" ? gtag("event", "click", { "event_category": t, "event_label": e, "value": n }) : console.log("gtag nem elérhető:", e, t, n);
-    }
-    const t = document.querySelectorAll(".favorite-button");
-    t.forEach(e => e.addEventListener("click", () => addToFavorites(e)));
-    const n = document.querySelectorAll(".carousel blockquote");
-    let a = 0;
-    n[0].classList.add("active");
-    setInterval(() => {
-        n.forEach(e => e.classList.remove("active"));
-        n[a].classList.add("active");
-        a = (a + 1) % n.length;
-    }, 4000);
-});
-</script>
-
-<script nonce="xai-48273">
-document.addEventListener("DOMContentLoaded", () => {
+  <script nonce="xai-48273">
+  document.addEventListener("DOMContentLoaded", () => {
     const sections = document.querySelectorAll("section");
     const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                observer.unobserve(entry.target);
-            }
-        });
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
     }, { threshold: 0.1 });
     sections.forEach(section => observer.observe(section));
-});
+  });
 </script>
 
 <!-- Google Tag Manager -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // Google Tag Manager (GTM) betöltése az oldal betöltése után
+    // Google Tag Manager (GTM) betöltése kezdeti betöltés után
     var gtmScript = document.createElement("script");
     gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-XXXXXX";
     gtmScript.async = true;
     document.head.appendChild(gtmScript);
 
-    // DataLayer inicializálása GTM előtt
+    // dataLayer inicializálása GTM előtt
     window.dataLayer = window.dataLayer || [];
     
     function gtag() { dataLayer.push(arguments); }
 
-    // Google Analytics (GA4) betöltése csak felhasználói interakció esetén
+    // Google Analytics (GA4) betöltése csak ha a felhasználó interaktál
     function loadGA() {
         if (!window.gaLoaded) {
             var gaScript = document.createElement("script");
@@ -1439,7 +1410,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Google Ads betöltése csak görgetés esetén
+    // Google Ads betöltése csak ha a felhasználó görget
     function loadGoogleAds() {
         if (!window.adsLoaded) {
             var adsScript = document.createElement("script");
@@ -1450,12 +1421,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Felhasználói események a GA és Google Ads betöltéséhez
+    // Felhasználói események GA és Google Ads betöltéséhez
     document.addEventListener("mousemove", loadGA, { once: true });
     document.addEventListener("scroll", loadGoogleAds, { once: true });
 });
 </script>
-
+  
 </body>
 </html>
-  
+
